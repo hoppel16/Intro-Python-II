@@ -57,14 +57,31 @@ rooms['treasure'].s_to = rooms['narrow']
 
 
 def fill_rooms_with_items():
-    base_name = ["Staff", "Rapier", "Longsword", "Wand", "Dagger", "Helmet", "Breastplate", "Boots", "Leggings"]
-    descriptors = ["Holding", "Resistance", "Luck", "Power", "Fun", "Destruction"]
-    descriptions = ["It can shoot a fireball, but it's not strong enough to do anything but light a candle.",
-                    "It is very pretty looking, but not very effective.",
-                    "It's covered in rust and looks very worn out, but it can still be used effectively."]
+    base_name = [
+        "Staff",
+        "Rapier",
+        "Longsword",
+        "Wand",
+        "Dagger",
+        "Helmet",
+        "Breastplate",
+        "Boots",
+        "Leggings"]
+    descriptors = [
+        "Holding",
+        "Resistance",
+        "Luck",
+        "Power",
+        "Fun",
+        "Destruction"]
+    descriptions = [
+        "It can shoot a fireball, but it's not strong enough to do anything but light a candle.",
+        "It is very pretty looking, but not very effective.",
+        "It's covered in rust and looks very worn out, but it can still be used effectively."]
 
     for room in rooms:
-        item_name = random.choice(base_name) + " of " + random.choice(descriptors)
+        item_name = random.choice(base_name) + " of " + \
+            random.choice(descriptors)
         item = Item(item_name, random.choice(descriptions))
         rooms[room].items.append(item)
 
@@ -76,7 +93,7 @@ def filter_user_input(user_input):
         print("Thanks for playing! See you next time!")
         exit(0)
     elif filtered_input == "help":
-        print("You can travel in any direction, look around, or grab items you see.")
+        print("Try typing a certain direction or looking around.")
         return 0
     elif filtered_input == "n":
         return "north"
@@ -130,7 +147,8 @@ def get_item():
         print("There is nothing in the room to get.")
         return
     # Add a check if there are multiple items and ask for which item to get or see if the user supplied it
-    # Use that check to remove and add the specific item, for now there is only one item per room
+    # Use that check to remove and add the specific item, for now there is
+    # only one item per room
     item = current_player.room.items.pop(0)
     current_player.items.append(item)
     print(f"You put the {item.name} in your backpack.")
@@ -185,7 +203,9 @@ def check_user_input(user_input):
 character_name = filter_user_input(input("What is your name?\n"))
 current_player = Player(character_name, rooms['outside'])
 
-print(f"Welcome {current_player.name}! You shall now begin you're adventure! Type quit at anytime to leave.\n\n")
+print(
+    f"Welcome {current_player.name.capitalize()}! You shall now begin you're adventure!\
+ Type quit at anytime to leave and type help if you aren't sure what to do.\n\n")
 
 fill_rooms_with_items()
 
