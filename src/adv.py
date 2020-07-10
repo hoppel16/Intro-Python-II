@@ -9,15 +9,16 @@ from fuzzywuzzy import fuzz, process
 
 input_possibilities = {
     "movement": {
-        "north_movement": ["north", "up"],
-        "south_movement": ["south", "down"],
-        "east_movement": ["east", "right"],
-        "west_movement": ["west", "left"]
+        "north_movement": ["north"],
+        "south_movement": ["south"],
+        "east_movement": ["east"],
+        "west_movement": ["west"]
     },
     "actions": {
         "observation": ["look", "see", "find"],
         "acquire": ["get", "pick up", "acquire", "grab"],
-        "items": ["item", "inventory", "holding", "backpack"]
+        "items": ["item", "inventory", "holding", "backpack"],
+        "drop": ["drop", "throw", "remove", "let go"]
     }
 }
 
@@ -154,6 +155,17 @@ def get_item():
     print(f"You put the {item.name} in your backpack.")
 
 
+def drop_item(item_string):
+    for held_item in current_player.items:
+        print(fuzz.token_set_ratio(item_string, held_item.name))
+        if fuzz.token_set_ratio(item_string, held_item.name) > 60:
+            current_player.items.remove(held_item)
+            current_player.room.items.append(held_item)
+            print(f"You dropped the {held_item.name}")
+            return
+    print(f"You don't have that item. Try being more specific.")
+
+
 def view_inventory():
     if len(current_player.items) == 0:
         print("You have no items.")
@@ -195,6 +207,8 @@ def check_user_input(user_input):
     elif highest_ratio[0] in input_possibilities["actions"]["items"]:
         view_inventory()
         return
+    elif highest_ratio[0] in input_possibilities["actions"]["drop"]:
+        drop_item(user_input)
 
 
 # Make a new player object that is currently in the 'outside' room.
